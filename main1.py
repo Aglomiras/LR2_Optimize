@@ -15,9 +15,6 @@ gamma = 1 - lambda_val
 eta = (1 - gamma) * rate
 
 
-'''Инициализация начального вектора со случайными значениями'''
-
-
 '''Возвращает вектор искомых значений функции. Выводит число итераций или отсутствие решений'''
 def print_message(mass, count, flag):
     if flag:
@@ -56,7 +53,8 @@ def grad_descent():
 
         count_flag = count_flag + 1
 
-    return print_message(W1, count_flag, flag)
+    print_message(W1, count_flag, flag)
+    return count_flag
 
 
 def grad_descent_momentum():
@@ -91,7 +89,8 @@ def grad_descent_momentum():
 
         count_flag = count_flag + 1
 
-    return print_message(W1, count_flag, flag)
+    print_message(W1, count_flag, flag)
+    return count_flag
 
 
 def grad_descent_NAG():
@@ -126,7 +125,8 @@ def grad_descent_NAG():
 
         count_flag = count_flag + 1
 
-    return print_message(W1, count_flag, flag)
+    print_message(W1, count_flag, flag)
+    return count_flag
 
 
 def grad_descent_RMSPro():
@@ -161,7 +161,8 @@ def grad_descent_RMSPro():
 
         count_flag = count_flag + 1
 
-    return print_message(W1, count_flag, flag)
+    print_message(W1, count_flag, flag)
+    return count_flag
 
 
 def grad_descent_AdaDelta():
@@ -201,7 +202,8 @@ def grad_descent_AdaDelta():
 
         count_flag = count_flag + 1
 
-    return print_message(W1, count_flag, flag)
+    print_message(W1, count_flag, flag)
+    return count_flag
 
 
 def grad_descent_Adam():
@@ -241,24 +243,44 @@ def grad_descent_Adam():
 
         count_flag = count_flag + 1
 
-    return print_message(W1, count_flag, flag)
+    print_message(W1, count_flag, flag)
+    return count_flag
 
 
-resalt_classic = []
-for i in range(1000):
-    resalt_classic.append(grad_descent()[0])
-for i in range(1000):
-    print(resalt_classic[i])
+data = []
+res = []
+for i in range(100):
+    res.append(grad_descent())
+res1 = []
+for i in range(100):
+    res1.append(grad_descent_momentum())
+res2 = []
+for i in range(100):
+    res2.append(grad_descent_NAG())
+res3 = []
+for i in range(100):
+    res3.append(grad_descent_RMSPro())
+res4 = []
+for i in range(100):
+    res4.append(grad_descent_AdaDelta())
+res5 = []
+for i in range(100):
+    res5.append(grad_descent_Adam())
 
 
-fig = plt.figure(figsize=(10, 10))
-# Creating plot
-plt.boxplot(resalt_classic)
-# show plot
+data.append(res)
+data.append(res1)
+data.append(res2)
+data.append(res3)
+data.append(res4)
+data.append(res5)
+
+
+fig, ax = plt.subplots()
+bar = ['Classic', 'Momentum', 'NAG', 'RMSProp', 'AdaDelta', 'Adam']
+ax.set_xlabel('Данные оп каждому методу')
+ax.set_xticklabels(bar)
+ax.set_ylabel('Количество итераций')
+ax.set_title('Усатая диаграмма')
+ax.boxplot(data)
 plt.show()
-
-# grad_descent_momentum()
-# grad_descent_NAG()
-# grad_descent_RMSPro()
-# grad_descent_AdaDelta()
-# grad_descent_Adam()
