@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 '''Инициализация общих констант'''
 max_iter = 10000  # предельное количество итераций
-epsilon = 1 * math.pow(math.e, -6) # точность расчета
+epsilon = 1 * math.pow(math.e, -6) # точность расчета (чем меньше, тем лучше)
 rate = 0.01  # скорость спуска
 
 lambda_val = 0.1  # коэффициент забывания
@@ -19,6 +19,7 @@ eta = (1 - gamma) * rate
 def print_message(mass, count, flag):
     if flag:
         print("Число итераций = {:d}".format(count))
+        print(mass)
         return mass
     else:
         print("Решение не найдено")
@@ -26,7 +27,6 @@ def print_message(mass, count, flag):
 
 def grad_descent():
     w = []
-
     '''заполнение начального вектора случайными числами'''
     for i in range(2):
         w.append(random.randint(-100, 100))
@@ -60,7 +60,6 @@ def grad_descent():
 def grad_descent_momentum():
     w = []
     v = []
-
     '''заполнение начального вектора случайными числами'''
     for i in range(2):
         w.append(random.randint(-100, 100))
@@ -96,7 +95,6 @@ def grad_descent_momentum():
 def grad_descent_NAG():
     w = []
     v = []
-
     '''заполнение начального вектора случайными числами'''
     for i in range(2):
         w.append(random.randint(-100, 100))
@@ -129,10 +127,9 @@ def grad_descent_NAG():
     return count_flag
 
 
-def grad_descent_RMSPro():
+def grad_descent_RMSProp():
     w = []
     G = []
-
     '''заполнение начального вектора случайными числами'''
     for i in range(2):
         w.append(random.randint(-100, 100))
@@ -167,11 +164,10 @@ def grad_descent_RMSPro():
 
 def grad_descent_AdaDelta():
     Delta = 0.01  # коэффициент забывания
-    delta1 = 0.01
+    delta_1 = 0.01
 
     w = []
     G = []
-
     '''заполнение начального вектора случайными числами'''
     for i in range(2):
         w.append(random.randint(-100, 100))
@@ -189,9 +185,9 @@ def grad_descent_AdaDelta():
 
         for i in range(len(Grad_W)):
             G[i] = alpha * G[i] + (1 - alpha) * Grad_W[i] * Grad_W[i]
-            delta1 = Grad_W[i] * (math.sqrt(Delta) + epsilon) / math.sqrt(G[i] + epsilon)
-            Delta = alpha * Delta + (1 - alpha) * delta1 * delta1
-            W1[i] = w[i] - delta1
+            delta_1 = Grad_W[i] * (math.sqrt(Delta) + epsilon) / math.sqrt(G[i] + epsilon)
+            Delta = alpha * Delta + (1 - alpha) * delta_1 * delta_1
+            W1[i] = w[i] - delta_1
 
         if abs(w[0] - W1[0]) < epsilon and abs(w[1] - W1[1]) < epsilon:
             flag = True
@@ -210,7 +206,6 @@ def grad_descent_Adam():
     w = []
     v = []
     G = []
-
     '''заполнение начального вектора случайными числами'''
     for i in range(2):
         w.append(random.randint(-100, 100))
@@ -246,41 +241,45 @@ def grad_descent_Adam():
     print_message(W1, count_flag, flag)
     return count_flag
 
+grad_descent()
+# grad_descent_momentum()
+# grad_descent_NAG()
+# grad_descent_RMSProp()
+# grad_descent_AdaDelta()
+# grad_descent_Adam()
 
-data = []
-res = []
-for i in range(100):
-    res.append(grad_descent())
-res1 = []
-for i in range(100):
-    res1.append(grad_descent_momentum())
-res2 = []
-for i in range(100):
-    res2.append(grad_descent_NAG())
-res3 = []
-for i in range(100):
-    res3.append(grad_descent_RMSPro())
-res4 = []
-for i in range(100):
-    res4.append(grad_descent_AdaDelta())
-res5 = []
-for i in range(100):
-    res5.append(grad_descent_Adam())
-
-
-data.append(res)
-data.append(res1)
-data.append(res2)
-data.append(res3)
-data.append(res4)
-data.append(res5)
-
-
-fig, ax = plt.subplots()
-bar = ['Classic', 'Momentum', 'NAG', 'RMSProp', 'AdaDelta', 'Adam']
-ax.set_xlabel('Данные оп каждому методу')
-ax.set_xticklabels(bar)
-ax.set_ylabel('Количество итераций')
-ax.set_title('Усатая диаграмма')
-ax.boxplot(data)
-plt.show()
+# data = []
+# res = []
+# for i in range(100):
+#     res.append(grad_descent())
+# res1 = []
+# for i in range(100):
+#     res1.append(grad_descent_momentum())
+# res2 = []
+# for i in range(100):
+#     res2.append(grad_descent_NAG())
+# res3 = []
+# for i in range(100):
+#     res3.append(grad_descent_RMSProp())
+# res4 = []
+# for i in range(100):
+#     res4.append(grad_descent_AdaDelta())
+# res5 = []
+# for i in range(100):
+#     res5.append(grad_descent_Adam())
+#
+# data.append(res)
+# data.append(res1)
+# data.append(res2)
+# data.append(res3)
+# data.append(res4)
+# data.append(res5)
+#
+# fig, ax = plt.subplots()
+# bar = ['Classic', 'Momentum', 'NAG', 'RMSProp', 'AdaDelta', 'Adam']
+# ax.set_xlabel('Данные по каждому методу')
+# ax.set_xticklabels(bar)
+# ax.set_ylabel('Количество итераций')
+# ax.set_title('Усатая диаграмма')
+# ax.boxplot(data)
+# plt.show()
